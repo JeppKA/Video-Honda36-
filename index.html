@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Honda Concept · Reveal 360°</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: #0a0a0a;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    #stage {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #0a0a0a;
+    }
+
+    #label {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      z-index: 5;
+    }
+
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: opacity 0.5s ease;
+    }
+
+    #intro-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #intro-overlay p {
+      color: #999;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+
+    #play-btn {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    #play-btn:active { transform: scale(0.92); }
+
+    #play-btn svg { width: 26px; height: 26px; margin-left: 4px; }
+
+    #controls {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #controls.visible { opacity: 1; }
+
+    .ctrl-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .ctrl-btn svg { width: 18px; height: 18px; }
+  </style>
+</head>
+<body>
+
+  <div id="label">Honda Concept · Full Turntable</div>
+
+  <div id="intro-overlay">
+    <p>Tocca per avviare il reveal</p>
+    <button id="play-btn" aria-label="Avvia video">
+      <svg viewBox="0 0 24 24" fill="#0a0a0a"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+  </div>
+
+  <div id="stage">
+    <video id="video" src="honda_turntable.mp4" playsinline webkit-playsinline loop muted></video>
+  </div>
+
+  <div id="controls">
+    <button class="ctrl-btn" id="pause-btn" aria-label="Pausa">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+  </div>
+
+  <script>
+    const overlay = document.getElementById('intro-overlay');
+    const playBtn = document.getElementById('play-btn');
+    const pauseBtn = document.getElementById('pause-btn');
+    const controls = document.getElementById('controls');
+    const video = document.getElementById('video');
+
+    playBtn.addEventListener('click', () => {
+      video.play();
+      overlay.classList.add('hidden');
+      controls.classList.add('visible');
+    });
+
+    let playing = true;
+    pauseBtn.addEventListener('click', () => {
+      playing = !playing;
+      if (playing) {
+        video.play();
+        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+      } else {
+        video.pause();
+        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>';
+      }
+    });
+  </script>
+
+</body>
+</html>
